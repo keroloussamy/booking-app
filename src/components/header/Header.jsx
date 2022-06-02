@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
 const Header = ({ type }) => {
+  const navigate = useNavigate();
   const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
   const [date, setDate] = useState([
@@ -31,8 +32,6 @@ const Header = ({ type }) => {
     children: 0,
     room: 1,
   });
-
-  const navigate = useNavigate();
 
   const handleOption = (name, operation) => {
     setOptions((prev) => {
