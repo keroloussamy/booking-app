@@ -2,9 +2,13 @@ import express from 'express';
 import { config } from "dotenv";
 import mongoose from "mongoose";
 import "express-async-errors"
+import cookieParser from "cookie-parser";
 import notFound from './middleware/not-found.js';
 import errorHandlerMiddleware from './middleware/error-handler.js';
 import hotelsRoute from "./routes/hotels.js";
+import usersRoute from "./routes/users.js";
+import authRoute from "./routes/auth.js";
+
 
 const app = express();
 config();
@@ -23,10 +27,13 @@ mongoose.connection.on("disconnected", () => { //Just listen when the connection
 });
 
 //middleware
+app.use(cookieParser());
 app.use(express.json()); //parse json data from request body to object in req.body property.
 
 // routes middleware
+app.use("/api/auth", authRoute);
 app.use("/api/hotels", hotelsRoute);
+app.use("/api/users", usersRoute);
 
 app.use(notFound)
 app.use(errorHandlerMiddleware);
