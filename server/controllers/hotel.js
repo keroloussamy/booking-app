@@ -64,3 +64,15 @@ export const getHotels = async (req, res, next) => {
   const hotels = await Hotel.find({});
   res.status(200).json(hotels);
 };
+
+export const countByCity = async (req, res, next) => {
+  const cities = req.query.cities.split(",");
+
+  const list = await Promise.all(
+    cities.map(async city => {
+      return Hotel.countDocuments({ city }); //countDocuments return just count without the data, so it's faster.
+    })
+  );
+
+  res.status(200).json(list);
+}
