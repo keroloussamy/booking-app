@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import mongoose from "mongoose";
 import "express-async-errors"
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import notFound from './middleware/not-found.js';
 import errorHandlerMiddleware from './middleware/error-handler.js';
 import hotelsRoute from "./routes/hotels.js";
@@ -28,6 +29,7 @@ mongoose.connection.on("disconnected", () => { //Just listen when the connection
 });
 
 //middleware
+app.use(cors()); //You can use proxy instead of adding cors middleware
 app.use(cookieParser());
 app.use(express.json()); //parse json data from request body to object in req.body property.
 
