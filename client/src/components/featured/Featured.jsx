@@ -1,6 +1,6 @@
 import { useGetCountByCityQuery } from "../../api/apiSlice";
 // import useFetch from "../../hooks/useFetch";
-import Loader from "../loader/loader";
+import Loader from "../loader/Loader";
 import "./featured.css";
 
 const Featured = () => {

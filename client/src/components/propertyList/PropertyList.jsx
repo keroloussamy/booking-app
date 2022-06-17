@@ -1,6 +1,6 @@
 // import useFetch from "../../hooks/useFetch";
 import { useGetCountByTypeQuery } from "../../api/apiSlice";
-import Loader from "../loader/loader";
+import Loader from "../loader/Loader";
 import "./propertyList.css";
 
 const PropertyList = () => {
