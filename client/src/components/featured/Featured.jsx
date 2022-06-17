@@ -1,18 +1,15 @@
-import { Fragment } from "react";
 import { useGetCountByCityQuery } from "../../api/apiSlice";
 // import useFetch from "../../hooks/useFetch";
 import Loader from "../loader/loader";
 import "./featured.css";
 
 const Featured = () => {
-  // const {data, loading, error} = useFetch("/hotels/countByCity?cities=berlin,madrid,london");  //Question why using this custom hook, make two requests on network tab? 
-  const { data, isLoading, isSuccess, isError, error } = useGetCountByCityQuery();
+  // const {data, isLoading } = useFetch("/hotels/countByCity?cities=berlin,madrid,london");  //Question why using this custom hook, make two requests on network tab? 
+  const { data, isLoading } = useGetCountByCityQuery();
   // console.log('ss') // why 3 times appears.
   return (
-    <div className="featured">
-
-      {isLoading ? (<Loader />) : (
-      <Fragment>
+    isLoading ? (<Loader />) : (
+      <div className="featured">
         <div className="featuredItem">
           <img
             src="https://cf.bstatic.com/xdata/images/city/max500/957801.webp?k=a969e39bcd40cdcc21786ba92826063e3cb09bf307bcfeac2aa392b838e9b7a5&o="
@@ -46,9 +43,8 @@ const Featured = () => {
             <h2>{data[2]} properties</h2>
           </div>
         </div>
-      </Fragment>
-      )}
-    </div>
+      </div>
+    )
   )
 }
 

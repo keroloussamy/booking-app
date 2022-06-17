@@ -6,7 +6,10 @@ export const apiSlice = createApi({
   endpoints: builder => ({
     getCountByCity: builder.query({
       query: () => '/hotels/countByCity?cities=berlin,madrid,london'
+    }),
+    getCountByType: builder.query({
+      query: () => '/hotels/countByType'
     })
   })
 })
-export const { useGetCountByCityQuery } = apiSlice
+export const { useGetCountByCityQuery, useGetCountByTypeQuery } = apiSlice
