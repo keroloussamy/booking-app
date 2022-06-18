@@ -16,8 +16,17 @@ export const apiSlice = createApi({
     }),
     //Query takes only one parameter.
     getHotels: builder.query({
-      query: ({ destination, min, max }) => `/hotels?city=${destination}&min=${min || 0 }&max=${max || 999}`
+      query: ({ destination, min, max }) => `/hotels?city=${destination}&min=${min || 0}&max=${max || 999}`
+    }),
+    getHotel: builder.query({
+      query: (id) => `/hotels/find/${id}`
     }),
   })
 })
-export const { useGetCountByCityQuery, useGetCountByTypeQuery, useGetFeaturedPropertiesQuery, useGetHotelsQuery } = apiSlice
+export const {
+  useGetCountByCityQuery,
+  useGetCountByTypeQuery,
+  useGetFeaturedPropertiesQuery,
+  useGetHotelsQuery,
+  useGetHotelQuery,
+} = apiSlice
