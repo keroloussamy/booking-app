@@ -7,7 +7,7 @@ export const verifyToken = (req, res, next) => {
     return next(createCustomError("You are not authenticated!", 401));
   }
 
-  jwt.verify(token, process.env.JWT, (err, user) => {
+  jwt.verify(token, process.env.JWT_TOKEN_SECRET, (err, user) => {
     if (err) return next(createCustomError("Token is not valid!", 403));
     req.user = user;
     next();
@@ -15,8 +15,8 @@ export const verifyToken = (req, res, next) => {
 };
 
 export const verifyUser = (req, res, next) => {
-  verifyToken(req, res, next, () => {
-    if (req.user.id === req.params.id || req.user.isAdmin) { //If the right user or admin
+  verifyToken(req, res, () => {
+    if (req.user._id === req.params.id || req.user.isAdmin) { //If the right user or admin
       next();
     } else {
       return next(createCustomError("You are not authorized!", 403));
@@ -24,10 +24,12 @@ export const verifyUser = (req, res, next) => {
   });
 };
 
+//The next here is the next function in the chain of middleware, like getUsers, AddHotels etc.
 export const verifyAdmin = (req, res, next) => {
-  verifyToken(req, res, next, () => {
+  //Here you are calling the verifyToken function, and sending to it a next function to call it when it's done.
+  verifyToken(req, res, () => {
     if (req.user.isAdmin) {
-      next();
+      next(); //This's the next function that comes to verifyAdmin. The getUsers, AddHotels etc.
     } else {
       return next(createCustomError("You are not authorized!", 403));
     }
