@@ -14,19 +14,28 @@ export const apiSlice = createApi({
     getFeaturedProperties: builder.query({
       query: () => '/hotels?featured=true&limit=4'
     }),
-    //Query takes only one parameter.
+    //Note: Queries take only one parameter.
     getHotels: builder.query({
       query: ({ destination, min, max }) => `/hotels?city=${destination}&min=${min || 0}&max=${max || 999}`
     }),
     getHotel: builder.query({
       query: (id) => `/hotels/find/${id}`
     }),
+    login: builder.mutation({
+      query: credentials => ({
+        url: '/auth/login',
+        method: 'POST',
+        body: credentials
+      })
+    }),
   })
 })
+
 export const {
   useGetCountByCityQuery,
   useGetCountByTypeQuery,
   useGetFeaturedPropertiesQuery,
   useGetHotelsQuery,
   useGetHotelQuery,
+  useLoginMutation,
 } = apiSlice
