@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../api/apiSlice';
 import AuthContext from '../../context/AuthContext';
@@ -6,16 +6,17 @@ import './login.css'
 
 const Login = () => {
   const navigate = useNavigate()
-  const [credentials, setCredentials] = useState({
+
+  let credentials = {
     email: undefined,
     password: undefined,
-  });
+  };
 
   const { loading, error, dispatch } = useContext(AuthContext);
 
 
   const handleChangeEmailOrPassword = (e) => {
-    setCredentials((prev) => ({...prev, [e.target.name]: e.target.value}));
+    credentials = {...credentials, [e.target.name]: e.target.value};
   }
 
   const [login] = useLoginMutation();
@@ -29,7 +30,7 @@ const Login = () => {
         dispatch({ type: "LOGIN_SUCCESS", payload: data });
         navigate("/")
       })
-      .catch((error) => dispatch({ type: "LOGIN_FAILURE", payload: error }))
+      .catch((error) => {dispatch({ type: "LOGIN_FAILURE", payload: error })})
   }
 
 
