@@ -5,6 +5,7 @@ import {
   getRoom,
   getRooms,
   updateRoom,
+  updateRoomAvailability,
 } from "../controllers/room.js";
 import { verifyAdmin } from "../utils/verifyToken.js";
 
@@ -15,5 +16,7 @@ router.put("/:id", verifyAdmin, updateRoom);
 router.delete("/:id/:hotelId", verifyAdmin, deleteRoom);
 router.get("/:id", getRoom);
 router.get("/", getRooms);
+
+router.put("/availability/:id", updateRoomAvailability);
 
 export default router;

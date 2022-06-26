@@ -53,3 +53,21 @@ export const getRooms = async (req, res, next) => {
   const rooms = await Room.find({});
   res.status(200).json(rooms);
 };
+
+export const updateRoomAvailability = async (req, res, next) => {
+  console.log(req.params.id, req.body.dates);
+  const updatedRoom = await Room.updateOne(
+    { "roomNumbers._id": req.params.id },
+    {
+      $push: {
+        "roomNumbers.$.unavailableDates": req.body.dates //To update nested objects.
+      },
+    }
+  );
+
+  if (!updatedRoom) {
+    return next(createCustomError(`Room With this id: ${roomID} doesn't exist.`, 404))
+  }
+
+  res.status(200).json("Room status has been updated.");
+};
