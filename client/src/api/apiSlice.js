@@ -21,6 +21,16 @@ export const apiSlice = createApi({
     getHotel: builder.query({
       query: (id) => `/hotels/find/${id}`
     }),
+    getHotelRooms: builder.query({
+      query: (hotelId) => `/hotels/${hotelId}/rooms`
+    }),
+    updateRoomAvailability: builder.mutation({
+      query: ({ roomNumberId, allDates }) => ({
+        url: `/rooms/availability/${roomNumberId}`,
+        method: 'PUT',
+        body: allDates
+      })
+    }),
     login: builder.mutation({
       query: credentials => ({
         url: '/auth/login',
@@ -37,5 +47,7 @@ export const {
   useGetFeaturedPropertiesQuery,
   useGetHotelsQuery,
   useGetHotelQuery,
+  useGetHotelRoomsQuery,
   useLoginMutation,
+  useUpdateRoomAvailabilityMutation,
 } = apiSlice
