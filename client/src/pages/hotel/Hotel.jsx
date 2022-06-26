@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useGetHotelQuery } from "../../api/apiSlice";
 import SearchContext from "../../context/SearchContext";
+import AuthContext from "../../context/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleArrowLeft,
@@ -15,17 +16,20 @@ import MailList from "../../components/mailList/MailList";
 import Footer from "../../components/footer/Footer";
 import Loader from "../../components/loader/Loader";
 import "./hotel.css";
+import Reserve from "../../components/reserve/Reserve";
 
 const Hotel = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const hotelId = location.pathname.split("/")[2];
 
   const [slideNumber, setSlideNumber] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [openImgModel, setOpenImgModel] = useState(false);
+  const [openReserveModal, setOpenReserveModal] = useState(false);
 
   const { data, isLoading } = useGetHotelQuery(hotelId);
-
   const { dates, options } = useContext(SearchContext);
+  const { user } = useContext(AuthContext);
 
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
   function dayDifference(date1, date2) {
@@ -33,14 +37,15 @@ const Hotel = () => {
     const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
     return diffDays;
   }
+  console.log(dates);
   const days = dayDifference(dates[0].endDate, dates[0].startDate);
 
-  const handleOpen = (i) => {
+  const handleOpenImgModel = (i) => {
     setSlideNumber(i);
-    setOpen(true);
+    setOpenImgModel(true);
   };
 
-  const handleMove = (direction) => {
+  const handleMoveImgModel = (direction) => {
     let newSlideNumber;
 
     if (direction === "left") {
@@ -52,6 +57,14 @@ const Hotel = () => {
     setSlideNumber(newSlideNumber)
   };
 
+  const handleClickReserve = () => {
+    if (user) {
+      setOpenReserveModal(true);
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -61,17 +74,17 @@ const Hotel = () => {
       ) : (
       <div className="hotelContainer">
 
-        {open && (
+        {openImgModel && (
           <div className="slider">
             <FontAwesomeIcon
               icon={faCircleXmark}
               className="close"
-              onClick={() => setOpen(false)}
+              onClick={() => setOpenImgModel(false)}
             />
             <FontAwesomeIcon
               icon={faCircleArrowLeft}
               className="arrow"
-              onClick={() => handleMove("left")}
+              onClick={() => handleMoveImgModel("left")}
             />
             <div className="sliderWrapper">
               <img src={data.photos[slideNumber].src} alt="" className="sliderImg" />
@@ -79,7 +92,7 @@ const Hotel = () => {
             <FontAwesomeIcon
               icon={faCircleArrowRight}
               className="arrow"
-              onClick={() => handleMove("right")}
+              onClick={() => handleMoveImgModel("right")}
             />
           </div>
         )}
@@ -102,7 +115,7 @@ const Hotel = () => {
             {data.photos?.map((photo, i) => (
               <div className="hotelImgWrapper" key={i}>
                 <img
-                  onClick={() => handleOpen(i)}
+                  onClick={() => handleOpenImgModel(i)}
                   src={photo}
                   alt=""
                   className="hotelImg"
@@ -124,7 +137,7 @@ const Hotel = () => {
                 <h2>
                   <b>${days * data.cheapestPrice * options.room}</b> {days} nights
                 </h2>
-              <button>Reserve or Book Now!</button>
+              <button onClick={handleClickReserve}>Reserve or Book Now!</button>
             </div>
           </div>
         </div>
@@ -132,6 +145,7 @@ const Hotel = () => {
         <Footer />
       </div>
       )}
+      {openReserveModal && <Reserve setOpenReserveModal={setOpenReserveModal} hotelId={hotelId}/>}
     </div>
   )
 }
